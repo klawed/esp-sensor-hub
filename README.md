@@ -16,6 +16,7 @@ ESP Sensor Hub provides a complete reference implementation for IoT sensing appl
 - **OTA Updates**: Secure over-the-air firmware updates
 - **Production-Ready Design**: PCB layouts optimized for manufacturing
 - **Enclosure Designs**: 3D-printable and injection-moldable enclosure options
+- **Web-Based Installation**: Browser-based firmware installation without additional software
 
 ## System Architecture
 
@@ -88,37 +89,27 @@ This project is specifically designed to be manufacturing-friendly, with feature
 6. **Regulatory Compliance**: FCC, CE, and UL certification guidelines
 7. **Documentation**: Complete BOM, assembly instructions, and testing procedures
 
-## Development Workflow
-
-```mermaid
-sequenceDiagram
-    participant Dev as Developer
-    participant Proto as Prototype
-    participant Test as Testing
-    participant Mfg as Manufacturing
-    participant Deploy as Deployment
-    
-    Dev->>Proto: Create concept on breadboard
-    Proto->>Proto: Iterate design
-    Proto->>Test: Transfer to dev board (ESP32/ESP8266)
-    Test->>Test: Validate functionality
-    Test->>Mfg: Design PCB for production
-    Mfg->>Mfg: Prototype PCB
-    Mfg->>Test: Validate production hardware
-    Test->>Deploy: Final firmware
-    Deploy->>Deploy: Field installation
-```
-
 ## Getting Started
 
-### Prerequisites
+### Installation Methods
+
+#### 1. Web-Based Installation (Recommended)
+The easiest way to install the firmware is directly from your web browser:
+
+1. Go to [https://klawed.github.io/esp-sensor-hub/](https://klawed.github.io/esp-sensor-hub/)
+2. Connect your ESP32/ESP8266 board to your computer
+3. Click the "Install" button and follow the on-screen instructions
+4. No additional software or drivers needed!
+
+#### 2. Traditional Setup
+
+##### Prerequisites
 - Arduino IDE or PlatformIO
 - ESP32 or ESP8266 development board
 - Selected sensors from the supported list
 - USB cable for programming
 
-### Basic Setup
-
+##### Steps
 1. Clone this repository
    ```bash
    git clone https://github.com/klawed/esp-sensor-hub.git
