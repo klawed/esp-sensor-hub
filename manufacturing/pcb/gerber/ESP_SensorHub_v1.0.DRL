@@ -1,0 +1,64 @@
+M48
+; DRILL file {KiCad 7.0} date 2025-05-30T00:00:00-00:00
+; FORMAT={-:-/ absolute / metric / decimal}
+; #@! TF.CreationDate,2025-05-30T00:00:00-00:00
+; #@! TF.GenerationSoftware,Kicad,Pcbnew,7.0
+; #@! TF.FileFunction,Plated,1,2,PTH
+FMAT,2
+METRIC
+; #@! TA.AperFunction,Plated,PTH,ViaDrill
+T1C0.200
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T2C0.800
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T3C1.000
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T4C1.200
+; #@! TA.AperFunction,Plated,PTH,ComponentDrill
+T5C3.200
+%
+G90
+G05
+T1
+; Via holes (0.2mm)
+X32.500Y20.000
+X40.000Y15.000
+X45.000Y25.000
+X50.000Y18.000
+X55.000Y22.000
+X25.000Y30.000
+X35.000Y32.000
+X42.000Y28.000
+X48.000Y30.000
+X52.000Y25.000
+T2
+; Programming header holes (0.8mm)
+X50.000Y10.000
+X48.000Y10.000
+X46.000Y10.000
+X44.000Y10.000
+X42.000Y10.000
+X40.000Y10.000
+T3
+; Component mounting holes (1.0mm)
+X10.000Y10.000
+X10.000Y15.000
+X10.000Y20.000
+X10.000Y25.000
+X55.000Y10.000
+X55.000Y15.000
+X55.000Y20.000
+X55.000Y25.000
+T4
+; Power connector holes (1.2mm)
+X32.500Y5.000
+X30.000Y5.000
+X35.000Y5.000
+T5
+; Mounting holes (3.2mm)
+X5.000Y5.000
+X60.000Y5.000
+X60.000Y35.000
+X5.000Y35.000
+T0
+M30
