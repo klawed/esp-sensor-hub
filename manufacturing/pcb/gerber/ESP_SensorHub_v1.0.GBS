@@ -1,0 +1,37 @@
+G04 #@! TF.GenerationSoftware,KiCad,Pcbnew,7.0*
+G04 #@! TF.CreationDate,2025-05-30T00:00:00-00:00*
+G04 #@! TF.ProjectId,ESP_SensorHub,45535020-5365-46e7-936f-724875622e6b,v1.0*
+G04 #@! TF.SameCoordinates,Original*
+G04 #@! TF.FileFunction,Soldermask,Bot*
+G04 #@! TF.FilePolarity,Negative*
+%FSLAX34Y34*%
+%MOMM*%
+%LPC*%
+G01*
+G04 ESP Sensor Hub v1.0 - Bottom Solder Mask*
+G04 Negative layer - openings in solder mask*
+G04*
+%ADD10C,0.1500*%
+%ADD11R,1.2000X0.8000*%
+%ADD12C,0.4000*%
+G04*
+G04 Component pads on bottom layer*
+D10*
+X180000Y220000D03*
+X160000Y220000D03*
+X140000Y220000D03*
+X120000Y220000D03*
+G04*
+G04 Mounting hole pads*
+D12*
+X50000Y50000D03*
+X600000Y50000D03*
+X600000Y350000D03*
+X50000Y350000D03*
+G04*
+G04 Power component pads*
+D11*
+X150000Y200000D03*
+X200000Y200000D03*
+G04*
+M02*
