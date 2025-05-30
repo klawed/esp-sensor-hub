@@ -1,0 +1,5 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+C7,100nF,0603,18.000,22.000,0,bottom
+C8,100nF,0603,16.000,22.000,0,bottom
+R6,4.7k,0603,14.000,22.000,0,bottom
+R7,4.7k,0603,12.000,22.000,0,bottom
