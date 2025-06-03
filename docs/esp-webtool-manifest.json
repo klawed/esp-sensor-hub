@@ -9,8 +9,7 @@
       "parts": [
         {
           "path": "https://github.com/klawed/esp-sensor-hub/releases/download/v0.0.7/wifi.bin",
-",
-          "offset": 0
+          "offset": 65536
         }
       ]
     }
