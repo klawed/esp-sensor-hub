@@ -21,9 +21,9 @@ jobs:
           arduino-cli core install esp32:esp32
 
       # Optional: Install libraries if your sketch needs them
-      # - name: Install libraries
-      #   run: |
-      #     arduino-cli lib install "Your Library Name 1"
+      - name: Install libraries
+        run: |
+          .arduino-cli lib install "Adafruit_SSD1306"
       #     arduino-cli lib install "Another Library@1.2.3" # Specific version
 
       - name: Compile Sketch
