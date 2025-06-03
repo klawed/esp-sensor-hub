@@ -2,11 +2,10 @@
 #include <Adafruit_SSD1306.h>
 #include <WiFi.h>
 
-#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_WIDTH 64  // OLED display width, in pixels
 #define SCREEN_HEIGHT 64  // OLED display height, in pixels
-#define OLED_RESET    -1  // Reset pin # (or -1 if sharing Arduino reset pin)
+#define OLED_RESET    4  // Reset pin # (or -1 if sharing Arduino reset pin)
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // Variables for WiFi scanning
 int currentAP = 0;
@@ -14,16 +13,14 @@ int totalAPs = 0;
 int scrollPosition = 0;
 unsigned long lastScanTime = 0;
 const long scanInterval = 10000;  // Rescan every 10 seconds
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
   Serial.begin(115200);
   
   // Initialize OLED with I2C address 0x3C
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-  }
-  
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); 
+
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -40,12 +37,47 @@ void setup() {
   
   // Perform initial scan
   scanNetworks();
+  scanI2C();
+}
+ 
+void scanI2C() {
+  byte error, address;
+  int nDevices;
+  Serial.println("Scanning...");
+  nDevices = 0;
+  for(address = 1; address < 127; address++ ) {
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+    if (error == 0) {
+      Serial.print("I2C device found at address 0x");
+      if (address<16) {
+        Serial.print("0");
+      }
+      Serial.println(address,HEX);
+      nDevices++;
+    }
+    else if (error==4) {
+      Serial.print("Unknow error at address 0x");
+      if (address<16) {
+        Serial.print("0");
+      }
+      Serial.println(address,HEX);
+    }    
+  }
+  if (nDevices == 0) {
+    Serial.println("No I2C devices found\n");
+  }
+  else {
+    Serial.println("done\n");
+  }
+  delay(5000);   
 }
 
 void loop() {
   // Rescan networks periodically
   if (millis() - lastScanTime > scanInterval) {
     scanNetworks();
+    scanI2C();
     lastScanTime = millis();
   }
   
@@ -119,7 +151,7 @@ void displayNetworks() {
   // Display current network info
   String ssid = WiFi.SSID(currentAP);
   int rssi = WiFi.RSSI(currentAP);
-  String auth = (WiFi.encryptionType(currentAP) == WIFI_AUTH_OPEN ? "Open" : "Secured";
+  String auth = (WiFi.encryptionType(currentAP) == WIFI_AUTH_OPEN) ? "Open" : "Secured";
   
   // Handle scrolling for long SSIDs
   if (ssid.length() > 20) {
