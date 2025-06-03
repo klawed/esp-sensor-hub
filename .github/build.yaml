@@ -28,7 +28,7 @@ jobs:
 
       - name: Compile Sketch
         run: |
-          arduino-cli compile --fqbn esp32:esp32:esp32 YOUR_SKETCH_NAME.ino --output-dir ./build
+          arduino-cli compile --fqbn esp32:esp32:esp32 src/esp32/wifi/wifi.ino --output-dir ./build
           # Replace YOUR_SKETCH_NAME.ino with the actual path and name of your main .ino file
           # For example: src/my_esp_project/my_esp_project.ino
           # The compiled binary will be in ./build/YOUR_SKETCH_NAME.ino.bin
@@ -36,7 +36,7 @@ jobs:
       - name: Get Sketch Name and Binary Path
         id: sketch_info
         run: |
-          SKETCH_FILE_BASENAME=$(basename YOUR_SKETCH_NAME.ino)
+          SKETCH_FILE_BASENAME=$(basename src/esp32/wifi/wifi.ino)
           echo "binary_name=${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
           echo "binary_path=./build/${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
           # Again, replace YOUR_SKETCH_NAME.ino
