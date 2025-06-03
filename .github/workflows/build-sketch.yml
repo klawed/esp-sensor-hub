@@ -38,7 +38,16 @@ jobs:
           SKETCH_FILE_BASENAME=$(basename src/esp32/wifi/wifi.ino)
           echo "binary_name=${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
           echo "binary_path=./build/${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
-          
+      - name: Prepare firmware binary for release
+        run: cp ${{ steps.sketch_info.outputs.binary_path }} ./firmware.bin
+
+      - name: Upload Firmware as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-build-${{ github.run_id }}
+          path: ./firmware.bin
+          retention-days: 7
+              
       - name: Create Release and Upload Binary
         uses: softprops/action-gh-release@v2
         with:
