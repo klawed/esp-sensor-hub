@@ -2,101 +2,50 @@
 
 import os
 import json
+import glob
 
-# Create output directories
-os.makedirs('web', exist_ok=True)
+def find_firmware_name(endswith=".bin"):
+    firmware_directory = "web/firmware/"
+    firmware_files = glob.glob(os.path.join(firmware_directory, f"*{endswith}"))
+    if firmware_files:
+        return os.path.splitext(os.path.basename(firmware_files[0]))[0]
+    return None
 
-# Create a dummy binary file for testing
-# In a real setup, this would be replaced with actual firmware
-if not os.path.exists('web/esp32.bin'):
-    with open('web/esp32.bin', 'wb') as f:
-        # Create a minimal binary just for testing
-        f.write(b'\x00' * 1024)
+def fill_manifest(github_username, github_project, github_build_number):
+    firmware_name = find_firmware_name()
+    if firmware_name is None:
+        raise ValueError("No firmware files found in the 'web/firmware/' directory with '.bin' extension.")
 
-# Create manifest file for ESP Web Tools
-manifest = {
-    "name": "ESP Sensor Hub",
-    "version": "1.0.0",
-    "home_assistant_domain": "esphome",
-    "new_install_skip_erase": False,
-    "builds": [
-        {
-            "chipFamily": "ESP32",
-            "parts": [
-                {"path": "esp32.bin", "offset": 0}
-            ]
-        }
-    ]
-}
-
-# Write manifest to file
-with open('web/esp-webtool-manifest.json', 'w') as f:
-    json.dump(manifest, f, indent=2)
-
-# Create simple HTML page with ESP Web Tools
-html = """<!DOCTYPE html>
-<html>
-
-<head>
-  <title>ESP Sensor Hub Installer</title>
-  <script type="module">import espWebTools from 'https://cdn.jsdelivr.net/npm/esp-web-tools@9.4.0/+esm'</script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
+    return {
+        "name": f"{github_username}/{github_project}",
+        "version": f"0.0.{github_build_number}",
+        "funding_url": f"https://github.com/{github_username}/{github_project}/contributors",
+        "builds": [
+            {
+                "chipFamily": "ESP32",
+                "parts": [
+                    {"path": f"firmware/{find_firmware_name('esp32.bin')}.bin", "offset": 0}
+                ]
+            },
+            {
+                "chipFamily": "ESP32-S3",
+                "parts": [
+                    {"path": f"firmware/{find_firmware_name('esp32s3.bin')}.bin", "offset": 0}
+                ]
+            }
+        ]
     }
-    h1 {
-      color: #333;
-    }
-    .container {
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    .instructions {
-      margin-top: 30px;
-    }
-    .instructions ol {
-      margin-left: 20px;
-    }
-    esp-web-install-button {
-      margin: 20px 0;
-    }
-  </style>
-</head>
 
-<body>
-  <h1>ESP Sensor Hub Installer</h1>
-  
-  <div class="container">
-    <p>This tool allows you to install the ESP Sensor Hub firmware directly from your browser. No need for Arduino IDE or PlatformIO!</p>
-    
-    <esp-web-install-button manifest="esp-webtool-manifest.json"></esp-web-install-button>
-    
-    <div class="instructions">
-      <h2>Instructions:</h2>
-      <ol>
-        <li>Plug your ESP32 board into your computer's USB port</li>
-        <li>Click the Install button above</li>
-        <li>Select the correct port when prompted</li>
-        <li>Wait for the installation to complete</li>
-        <li>Disconnect and reconnect your device to start using it</li>
-      </ol>
-    </div>
-  </div>
-</body>
+if __name__ == "__main__":
+    # Retrieve values from GitHub Actions environment variables
+    github_username, github_project = os.environ.get("GITHUB_REPOSITORY", 'user/repo').split('/')
+    github_build_number = os.environ.get("GITHUB_RUN_NUMBER", '0')
 
-</html>"""
+    manifest_data = fill_manifest(github_username, github_project, github_build_number)
 
-# Write HTML to file
-with open('web/index.html', 'w') as f:
-    f.write(html)
+    output_file = "web/esp-webtools-manifest.json"
 
-print("ESP Web Tools files generated successfully!")
-print("- web/esp32.bin (dummy file for testing)")
-print("- web/esp-webtool-manifest.json")
-print("- web/index.html")
+    with open(output_file, 'w') as file:
+        json.dump(manifest_data, file, indent=2)
+
+    print(f"Manifest has been filled and saved as {output_file}")

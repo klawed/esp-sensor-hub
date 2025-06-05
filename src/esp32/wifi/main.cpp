@@ -18,7 +18,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // GPIO4 (T0) is used for OLED_RESET, so we exclude it.
 // GPIO0 (T1) can be used for BOOT button.
 // GPIO2 (T2) can be used for onboard LED.
-const int touchPins[] = {T1, T2, T3, T4, T5, T6, T7, T8, T9}; // T1=0, T2=2, T3=15, T4=13, T5=12, T6=14, T7=27, T8=33, T9=32
+const int touchPins[] = {T6, T7}; // T1=0, T2=2, T3=15, T4=13, T5=12, T6=14, T7=27, T8=33, T9=32
 const int numTouchPins = sizeof(touchPins) / sizeof(touchPins[0]);
 #define TOUCH_THRESHOLD 40 // Lower values mean a touch is more likely. Adjust this value.
 bool touchDetectedFlag = false; // Flag to indicate if any touch was recently detected
@@ -26,6 +26,16 @@ bool touchDetectedFlag = false; // Flag to indicate if any touch was recently de
 int touchedPins[MAX_TOUCHED_PINS];
 int touchedValues[MAX_TOUCHED_PINS];
 int numTouched = 0;
+
+
+// --- FUNCTION PROTOTYPES ---
+// By adding these lines, we tell the compiler about the functions before they are called.
+void scanNetworks();
+void scanI2C();
+void scanTouchPins();
+void displayNetworks();
+// --- END OF PROTOTYPES ---
+
 
 void setup() {
   Serial.begin(115200);
@@ -86,7 +96,6 @@ void scanI2C() {
   else {
     Serial.println("I2C scan done.\n");
   }
-  // delay(5000); // Removed delay to make loop faster
 }
 
 void scanTouchPins() {
@@ -101,14 +110,8 @@ void scanTouchPins() {
       touchDetectedFlag = true;
 
       Serial.print("Touch detected on Pin: GPIO");
-      Serial.print(touchPins[i]); // Print the actual GPIO number
+      Serial.print(touchPins[i]);
       Serial.print(" (T");
-      // Find the T-number. This is a bit manual if not directly mapping.
-      // For simplicity, we'll just print GPIO.
-      // If you want T-numbers: T0=4, T1=0, T2=2, T3=15, T4=13, T5=12, T6=14, T7=27, T8=33, T9=32
-      // This requires a mapping or smarter lookup.
-      // For now, let's just identify by GPIO number.
-      // You can find the actual T-designation from ESP32 datasheets based on the GPIO.
       int t_num = -1;
       switch(touchPins[i]){
         case 0: t_num = 1; break;
@@ -124,20 +127,13 @@ void scanTouchPins() {
       if (t_num != -1) {
         Serial.print(t_num);
       } else {
-        Serial.print("?"); // Should not happen if touchPins array is correct
+        Serial.print("?");
       }
 
       Serial.print("), Value: ");
       Serial.println(touchVal);
     }
-    // Optional: Print all touch values for calibration
-    // Serial.print("Pin GPIO"); Serial.print(touchPins[i]); Serial.print(": "); Serial.println(touchVal);
   }
-  // if (touchDetectedFlag) {
-  //   Serial.println("Touch scan done (detections found).\n");
-  // } else {
-  //   Serial.println("Touch scan done (no new detections).\n");
-  // }
 }
 
 
@@ -172,13 +168,11 @@ void scanNetworks() {
   display.println("Scanning WiFi...");
   display.display();
   
-  totalAPs = WiFi.scanNetworks(); // WiFi.scanNetworks will return the number of networks found
-  // It's better to clear results before a new scan sometimes if issues occur,
-  // but scanNetworks usually handles this.
+  totalAPs = WiFi.scanNetworks();
 
-  if (totalAPs == WIFI_SCAN_FAILED) { // Check for specific failure code
+  if (totalAPs == WIFI_SCAN_FAILED) {
     Serial.println("WiFi Scan failed!");
-    totalAPs = 0; // Ensure totalAPs is 0 on failure
+    totalAPs = 0;
   } else if (totalAPs == 0) {
     Serial.println("No networks found");
   } else {
@@ -191,7 +185,6 @@ void scanNetworks() {
       Serial.print(" (");
       Serial.print(WiFi.RSSI(i));
       Serial.print("dBm) Enc: ");
-      // Get more descriptive encryption type
       switch (WiFi.encryptionType(i)) {
         case WIFI_AUTH_OPEN:            Serial.print("Open"); break;
         case WIFI_AUTH_WEP:             Serial.print("WEP"); break;
@@ -199,8 +192,8 @@ void scanNetworks() {
         case WIFI_AUTH_WPA2_PSK:        Serial.print("WPA2_PSK"); break;
         case WIFI_AUTH_WPA_WPA2_PSK:    Serial.print("WPA/WPA2_PSK"); break;
         case WIFI_AUTH_WPA2_ENTERPRISE: Serial.print("WPA2_Ent"); break;
-        case WIFI_AUTH_WPA3_PSK:        Serial.print("WPA3_PSK"); break; // If supported by your ESP32 core
-        case WIFI_AUTH_WPA2_WPA3_PSK:   Serial.print("WPA2/WPA3_PSK"); break; // If supported
+        case WIFI_AUTH_WPA3_PSK:        Serial.print("WPA3_PSK"); break;
+        case WIFI_AUTH_WPA2_WPA3_PSK:   Serial.print("WPA2/WPA3_PSK"); break;
         default:                        Serial.print("Unknown"); break;
       }
       Serial.println();
@@ -217,22 +210,19 @@ void displayNetworks() {
 
   if (totalAPs == 0) {
     display.println("No networks found");
-    // Display touch status if any was detected in the last scanTouchPins cycle
     if (touchDetectedFlag) {
-      display.setCursor(SCREEN_WIDTH - 18, 0); // Top right corner
+      display.setCursor(SCREEN_WIDTH - 18, 0);
       display.print("T!");
     }
     display.display();
     return;
   }
   
-  // Display header
   display.print("WiFi: ");
   display.print(currentAP + 1);
   display.print("/");
   display.println(totalAPs);
   
-  // Display current network info
   String ssid = WiFi.SSID(currentAP);
   int rssi = WiFi.RSSI(currentAP);
   String auth;
@@ -248,14 +238,13 @@ void displayNetworks() {
     default:                        auth = "Unknown"; break;
   }
   
-  // Handle scrolling for long SSIDs
   const int maxSsidDisplayLength = 20;
   if (ssid.length() > maxSsidDisplayLength) {
     if (scrollPosition + maxSsidDisplayLength > ssid.length() && ssid.length() > maxSsidDisplayLength) {
-        scrollPosition = 0; // Reset scroll if it goes too far or if ssid is just a bit longer
+        scrollPosition = 0;
     }
     display.println(ssid.substring(scrollPosition, scrollPosition + maxSsidDisplayLength));
-    if (millis() % 700 < 350) { // Slow down scroll update rate
+    if (millis() % 700 < 350) {
       scrollPosition++;
     }
   } else {
@@ -270,16 +259,15 @@ void displayNetworks() {
   display.println(auth);
   
   display.print("Bars: ");
-  int bars = map(rssi, -90, -40, 0, 5); // Adjusted mapping for RSSI
+  int bars = map(rssi, -90, -40, 0, 5);
   bars = constrain(bars, 0, 5);
   for (int i = 0; i < bars; i++) {
     display.print("|");
   }
-  display.println(); // New line after bars
+  display.println();
 
-  // Display touch status if any was detected in the last scanTouchPins cycle
   if (touchDetectedFlag && numTouched > 0) {
-    display.setCursor(SCREEN_WIDTH - 60, 0); // Adjust as needed for your display
+    display.setCursor(SCREEN_WIDTH - 60, 0);
     display.print("Touch:");
     for (int i = 0; i < numTouched; i++) {
       display.print(" ");
