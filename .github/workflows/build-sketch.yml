@@ -30,7 +30,7 @@ jobs:
 
       - name: Compile Sketch
         run: |
-          mv src/esp32/wifi/main.cpp src/esp32/wifi.ino
+          mv src/esp32/wifi/main.cpp src/esp32/wifi/wifi.ino
           arduino-cli compile --fqbn esp32:esp32:esp32 src/esp32/wifi/wifi.ino --output-dir ./build
           
       - name: Get Sketch Name and Binary Path
