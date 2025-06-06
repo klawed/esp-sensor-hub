@@ -9,7 +9,7 @@
       "parts": [
         {
           "path": "firmware/klawed_esp-sensor-hub_b6_esp32.bin",
-          "offset": 65536
+          "offset": 0
         }
       ]
     }
