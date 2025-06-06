@@ -2,54 +2,195 @@
 <html>
 
 <head>
-  <title>ESP Sensor Hub Installer</title>
+  <title>THE ETHERIC TRANSDUCER INITIATION</title>
   <script type="module">import espWebTools from 'https://cdn.jsdelivr.net/npm/esp-web-tools@9.4.0/+esm'</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Uncial+Antiqua&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --dali-sand: #d8c49a;
+      --thompson-blood: #a40000;
+      --void-black: #0a0a0a;
+      --electric-sky: #4d9de0;
+      --fever-dream-white: rgba(255, 255, 255, 0.9);
+    }
+
+    @keyframes pulse-shadow {
+      0% { box-shadow: 0 0 15px 5px rgba(77, 157, 224, 0.4), inset 0 0 10px 2px rgba(0,0,0,0.5); }
+      50% { box-shadow: 0 0 35px 15px rgba(164, 0, 0, 0.6), inset 0 0 20px 2px rgba(0,0,0,0.5); }
+      100% { box-shadow: 0 0 15px 5px rgba(77, 157, 224, 0.4), inset 0 0 10px 2px rgba(0,0,0,0.5); }
+    }
+
+    @keyframes background-crawl {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes text-flicker {
+      0%, 100% { text-shadow: 0 0 5px var(--fever-dream-white), 0 0 10px var(--fever-dream-white), 0 0 20px var(--electric-sky); }
+      50% { text-shadow: 0 0 8px var(--dali-sand), 0 0 15px var(--dali-sand), 0 0 25px var(--thompson-blood); }
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
+      font-family: 'Special Elite', monospace;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
+      padding: 40px 20px;
+      line-height: 1.9;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      color: var(--fever-dream-white);
+      overflow-x: hidden;
     }
+
     h1 {
-      color: #333;
+      font-family: 'Uncial Antiqua', cursive;
+      color: var(--dali-sand);
+      font-size: 3.5em;
+      text-align: center;
+      text-shadow: 3px 3px 0px var(--void-black), 5px 5px 15px var(--thompson-blood);
+      letter-spacing: 2px;
+      margin-bottom: 0;
+      transform: skew(-5deg);
     }
+
     .container {
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 20px;
-      margin-top: 20px;
+      border: 2px solid var(--dali-sand);
+      padding: 30px;
+      margin-top: 40px;
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 25px 5px rgba(77, 157, 224, 0.4), inset 0 0 10px 2px rgba(0,0,0,0.5);
+      animation: pulse-shadow 12s infinite ease-in-out;
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; /* Classic Dalí blob */
+      transform: rotate(-1deg);
     }
+    
+    .manic {
+        color: var(--thompson-blood);
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .surreal {
+        color: var(--electric-sky);
+        font-family: 'Uncial Antiqua', cursive;
+        letter-spacing: 1px;
+    }
+
+    .pinout-wrapper {
+      text-align: center;
+      margin: 20px 0;
+      filter: drop-shadow(0 0 15px var(--electric-sky));
+    }
+    
+    .pinout-wrapper img {
+      max-width: 80%;
+      border: 3px solid var(--dali-sand);
+      padding: 10px;
+      background: var(--void-black);
+      filter: hue-rotate(220deg) contrast(1.2) saturate(1.5);
+      transform: perspective(800px) rotateY(15deg) rotateX(5deg);
+      transition: transform 0.5s ease;
+    }
+
+    .pinout-wrapper img:hover {
+        transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.05);
+    }
+
+    .button-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 40px 0;
+    }
+
+    esp-web-install-button {
+      --esp-web-install-button-color: var(--dali-sand);
+      --esp-web-install-button-background-color: var(--thompson-blood);
+      --esp-web-install-button-border: 2px solid var(--dali-sand);
+      font-family: 'Uncial Antiqua', cursive;
+      font-size: 1.5em;
+      padding: 15px 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px var(--thompson-blood), 0 0 20px var(--thompson-blood);
+      transition: all 0.3s ease;
+      cursor: crosshair; /* We're not pointing, we're targeting. */
+    }
+
+    esp-web-install-button:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 0 20px var(--electric-sky), 0 0 40px var(--electric-sky);
+      --esp-web-install-button-background-color: var(--electric-sky);
+      --esp-web-install-button-color: var(--void-black);
+    }
+    
     .instructions {
       margin-top: 30px;
+      border-top: 1px dashed var(--dali-sand);
+      padding-top: 20px;
     }
+    
+    .instructions h2 {
+      font-family: 'Uncial Antiqua', cursive;
+      color: var(--electric-sky);
+      text-align: center;
+      animation: text-flicker 5s infinite;
+    }
+
     .instructions ol {
-      margin-left: 20px;
+      list-style-type: none;
+      padding-left: 0;
     }
-    esp-web-install-button {
-      margin: 20px 0;
+    
+    .instructions li {
+      margin-bottom: 15px;
+      padding-left: 35px;
+      position: relative;
     }
+    
+    .instructions li::before {
+      content: '👁️'; /* The eye of Dalí */
+      position: absolute;
+      left: 0;
+      top: -5px;
+      font-size: 1.5em;
+      filter: drop-shadow(0 0 3px var(--electric-sky));
+    }
+
   </style>
 </head>
 
 <body>
-  <h1>ESP Sensor Hub Installer</h1>
+  <h1>The Etheric Transducer Initiation</h1>
   
   <div class="container">
-    <p>This tool allows you to install the ESP Sensor Hub firmware directly from your browser. No need for Arduino IDE or PlatformIO!</p>
+    <p>A frantic message from the edge of reality! You're about to <span class="manic">mainline the raw, screaming data-ether</span> directly into the silicon soul of this god-forsaken chip. No life rafts, no IDEs, no safety nets. Just you, the <span class="surreal">Abyss</span>, and the button below.</p>
     
-    <esp-web-install-button manifest="esp-webtool-manifest.json"></esp-web-install-button>
+    <p style="text-align:center; color: var(--thompson-blood); font-weight:bold;">A WORD OF CAUTION, YOU DEGENERATE: We're flying blind here, bats in a hurricane. This contraption was cobbled together with ether, adrenaline, and pure, uncut hubris. It might work. It might melt your board into a puddle of <span class="surreal">existential dread</span>. Proceed.</p>
     
+    <div class="pinout-wrapper">
+      <img src="./img/espPinout.png" alt="A distorted, surreal pinout diagram of an ESP32, as if seen in a dream."/>
+    </div>
+    
+    <div class="button-wrapper">
+      <p style="margin-bottom:5px; font-size: 1.2em;">Too weird to live, too rare to die.</p>
+      <esp-web-install-button manifest="esp-webtools-manifest.json"></esp-web-install-button>
+      <p style="margin-top:5px; font-size: 0.9em;">...press it and see what kind of horror we've unleashed.</p>
+    </div>
+
     <div class="instructions">
-      <h2>Instructions:</h2>
+      <h2>The Ritual:</h2>
       <ol>
-        <li>Plug your ESP32 board into your computer's USB port</li>
-        <li>Click the Install button above</li>
-        <li>Select the correct port when prompted</li>
-        <li>Wait for the installation to complete</li>
-        <li>Disconnect and reconnect your device to start using it</li>
+        <li><span class="manic">Shackle the beast</span> to your machine. The USB umbilical cord is your only link to its tormented psyche.</li>
+        <li><span class="surreal">SMASH THE DAMN BUTTON.</span> Plunge the needle in. Show it who's boss.</li>
+        <li>Point the machine at the correct screaming soul when the dialog box appears. It will probably call itself 'COM' or '/dev/ttyUSB'. <span class="manic">Don't pick the wrong one.</span></li>
+        <li>Hold your breath. Pray to whatever twisted god you worship. The machine is <span class="surreal">dreaming</span> now. Wait for the green light of success or the red glare of damnation.</li>
+        <li><span class="manic">A hard reboot for a hard world.</span> Rip it out and plug it back in. Give it a taste of oblivion before it wakes up to its new purpose.</li>
       </ol>
+      <p style="font-size: 0.8em; text-align: center; opacity: 0.7;">If your particular brand of silicon madness isn't supported, scream into the void (or, you know, open a pull request on GitHub). We might hear you over the ringing in our ears.</p>
     </div>
   </div>
 </body>
