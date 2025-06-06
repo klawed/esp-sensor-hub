@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,41 +21,43 @@ jobs:
         run: |
           arduino-cli core update-index
           arduino-cli core install esp32:esp32
-      
+
+      # Optional: Install libraries if your sketch needs them
       - name: Install libraries
         run: |
-           arduino-cli lib install "Adafruit SSD1306"
-      
+          arduino-cli lib install "Adafruit SSD1306"
+      #     arduino-cli lib install "Another Library@1.2.3" # Specific version
+
       - name: Compile Sketch
         run: |
-          mv src/esp32/wifi/main.cpp src/esp32/wifi/wifi.ino
+          mv src/esp32/wifi/main.cpp src/esp32/wifi.ino
           arduino-cli compile --fqbn esp32:esp32:esp32 src/esp32/wifi/wifi.ino --output-dir ./build
-
-
+          
       - name: Get Sketch Name and Binary Path
         id: sketch_info
         run: |
           SKETCH_FILE_BASENAME=$(basename src/esp32/wifi/wifi.ino)
           echo "binary_name=${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
           echo "binary_path=./build/${SKETCH_FILE_BASENAME}.bin" >> $GITHUB_OUTPUT
-         
+      - name: Prepare firmware binary for release
+        run: cp ${{ steps.sketch_info.outputs.binary_path }} ./firmware.bin
 
+      - name: Upload Firmware as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-build-${{ github.run_id }}
+          path: ./firmware.bin
+          retention-days: 7
+              
       - name: Create Release and Upload Binary
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }} # Uses the tag that triggered the workflow
+          tag_name: ${{ github.ref_name }} 
           name: Release ${{ github.ref_name }}
           body: "Automated release for ESP Sensor Hub firmware version ${{ github.ref_name }}."
           draft: false
           prerelease: false
           files: |
             ${{ steps.sketch_info.outputs.binary_path }}
-            # You might want to rename the uploaded file to something generic like firmware.bin
-            # To do that, you'd first copy/rename the file in a previous step:
-            # Example:
-            # - name: Prepare firmware binary
-            #   run: mv ${{ steps.sketch_info.outputs.binary_path }} ./firmware.bin
-            # Then in files:
-            #   ./firmware.bin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
