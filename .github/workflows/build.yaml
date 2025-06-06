@@ -48,13 +48,12 @@ jobs:
 
     - name: Merge Firmware
       run: |
-        mkdir -p web/firmware
-        python3 ./generate_merge_firmware_command.py esp32dev esp32s3 | tee merge_firmware.bash
+        ./generate_merge_firmware_command.py esp32dev esp32s3 | tee merge_firmware.bash
         bash -ex ./merge_firmware.bash
 
     - name: Generate ESP Web Tools
       run: |
-        python3 ./generate_esp_web_tools.py
+        ./generate_esp_web_tools.py
         find web/
 
     - name: Deploy to GitHub Pages
