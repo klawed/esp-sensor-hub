@@ -1,14 +1,22 @@
 {
-  "name": "ESP Sensor Hub",
-  "version": "1.0.0",
-  "home_assistant_domain": "esphome",
-  "new_install_skip_erase": false,
+  "name": "klawed/esp-sensor-hub",
+  "version": "0.0.15",
+  "funding_url": "https://github.com/klawed/esp-sensor-hub/contributors",
   "builds": [
     {
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "firmware/klawed_esp-sensor-hub_b6_esp32.bin",
+          "path": "firmware/klawed_esp-sensor-hub_b15_esp32.bin",
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "firmware/klawed_esp-sensor-hub_b15_esp32s3.bin",
           "offset": 0
         }
       ]
