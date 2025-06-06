@@ -8,7 +8,7 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "https://github.com/klawed/esp-sensor-hub/releases/download/v0.0.7/wifi.ino.bin",
+          "path": "https://github.com/klawed/esp-sensor-hub/releases/download/v0.0.8/wifi.ino.bin",
           "offset": 65536
         }
       ]
