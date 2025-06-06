@@ -1,13 +1,13 @@
 {
   "name": "klawed/esp-sensor-hub",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "funding_url": "https://github.com/klawed/esp-sensor-hub/contributors",
   "builds": [
     {
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "firmware/klawed_esp-sensor-hub_b3_esp32.bin",
+          "path": "firmware/klawed_esp-sensor-hub_b4_esp32.bin",
           "offset": 0
         }
       ]
@@ -16,7 +16,7 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "firmware/klawed_esp-sensor-hub_b3_esp32s3.bin",
+          "path": "firmware/klawed_esp-sensor-hub_b4_esp32s3.bin",
           "offset": 0
         }
       ]
